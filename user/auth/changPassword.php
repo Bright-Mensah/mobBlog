@@ -20,7 +20,59 @@ if(isset($_POST['btnChangePassword'])){
     
     $oldPassword = $_POST['oldPassword'];
     $newPassword = $_POST['newPassword'];
-    $confirmNewPassword = $_POST['confirmNewPassword'];
+    $retypePassword = $_POST['retypePassword'];
+
+
+    if(empty($oldPassword)){
+      $msg = "<span class='alert alert-warning text-dark h5'> Old password is empty</span>";
+    }
+    else if(empty($newPassword)){
+      $msg = "<span class='alert alert-warning text-dark h5'> New password is empty</span>";
+      
+    }
+    else if(empty($retypePassword)){
+      $msg = "<span class='alert alert-warning text-dark h5'> Re-type  password is empty</span>";
+      
+    }
+    else{
+      // check if old password is correct
+      if($oldPassword == $_SESSION['userPassword']){
+        
+        // if password is correct check whether new password and re-type password matches
+
+        if($retypePassword == $newPassword){
+
+          // if password matches update the user account with the new password
+          $userEmail = $_SESSION['email'];
+          $query = "UPDATE registration SET password='$newPassword' WHERE email='$userEmail' ";
+
+          $query_run = mysqli_query($connection,$query);
+
+          if($query_run){
+
+            $msg = "<span class='alert alert-success text-dark h5'> Password changed successfully</span>";
+            // after password change logout the user to login 
+            header("refresh:3;http://localhost/blog/Admin/auth/");
+          }
+          else{
+            $msg = "<span class='alert alert-danger text-dark h5'> Something went wrong, try again later!!!!...</span>";
+
+          }
+         
+        }
+        else{
+          // if newpassword and retype password does not match prompt the user
+          $msg = "<span class='alert alert-warning text-dark h5'> New and Re-type password does not match</span>";
+
+        }
+        
+      }
+      else{
+        // if password isnt correct prompt the user
+        $msg = "<span class='alert alert-danger text-dark h5'>Password is incorrect</span>";
+       
+      }
+    }
 }
 
 ?>
@@ -118,7 +170,7 @@ if(isset($_POST['btnChangePassword'])){
         </a>
       </li>
       <li>
-        <a href="post.php" class="nav-link text-white">
+        <a href="../post.php" class="nav-link text-white">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
           Post
         </a>
@@ -131,7 +183,7 @@ if(isset($_POST['btnChangePassword'])){
       </li>
     
       <li>
-        <a href="Admin/auth/signout.php" class="nav-link text-white">
+        <a href="../../Admin/auth/signout.php" class="nav-link text-white">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
           Sign Out
         </a>
@@ -147,7 +199,9 @@ if(isset($_POST['btnChangePassword'])){
       <form action="" method="POST">
     <div class="row d-flex justify-content-center align-items-center mt-5">
 
-
+      <span class="text-center mb-5">
+        <small><?php echo $msg ?></small>
+      </span>
   
        
     <div class="col-lg-4">
@@ -174,8 +228,8 @@ if(isset($_POST['btnChangePassword'])){
 
         <div class="row mt-3">
             <div class="col-lg-4">
-                <label for="confirmPassword">Confirm new Password</label>
-                <input type="text" name="confirmNewPassword" class="form-control" id="confirmPassword" value="<?php echo $_POST['confirmNewPassword'] ?>">
+                <label for="retypePassword">Re-type new Password</label>
+                <input type="text" name="retypePassword" class="form-control" id="retypePassword" value="<?php echo $_POST['retypePassword'] ?>">
             </div>
         </div>
       
