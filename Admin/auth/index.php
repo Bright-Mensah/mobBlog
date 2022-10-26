@@ -54,6 +54,7 @@ if(isset($_POST['btnSignIn'])){
            $_SESSION['userSignedIn'] = $row['id'];
            $_SESSION['userName'] = $row['name'];
            $_SESSION['email'] = $row['email'];
+           $_SESSION['userPassword'] = $row['password'];
            
            // check if the remember me checkbox is checked
           if(empty($_POST['rememberMe'])){
@@ -219,16 +220,18 @@ else{
   <body class="text-center">
     
 <main class="form-signin w-100 m-auto">
-  <form action="" method="POST">
+  <form action="" method="POST" >
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
     <p class="message"><?php echo $msg ?></p>
 
     <div class="form-floating">
-      <input type="email" class="form-control" name="email"  value="<?php echo $_POST['email'] ?>">
+    
+      <input type="email" class="form-control" name="email"  id="email" placeholder="name@example.com" value="<?php echo $_POST['email'] ?>">
       <label for="email">Email address</label>
+     
     </div>
     <div class="form-floating">
-      <input type="password" class="form-control" name="password" value="<?php echo $_POST['password'] ?>">
+      <input type="password" class="form-control" name="password" id="password" placeholder="*****" value="<?php echo $_POST['password'] ?>">
       <label for="password">Password</label>
     </div>
 
